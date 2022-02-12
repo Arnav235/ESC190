@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <ctype.h>
 #include <string.h>
 #include "lab1.h"
 
@@ -19,15 +20,24 @@ int sandy_eats(char menu_item []){
 	if (strlen(menu_item) % 2 != 0) {return 0;} // checking if the string is odd or even
 	char *ret = strstr(menu_item, "fish");
 	if (ret != NULL) {return 0;}
+	ret = strstr(menu_item, "Fish");
+	if (ret != NULL) {return 0;}
 
+	char element;
 	for (int i = 0; i < strlen(menu_item); i++){
-		if (menu_item[i] == 'J' || menu_item[i] == 'K' || menu_item[i] == 'L'){
+		element = tolower(menu_item[i]);
+		if (element == 'j' || element == 'k' || element == 'l'){
 			return 0;
 		}
 	}
 	return 1;
 }
 
-char* imagine_fish(char thing []){
-	return strcat(thing, "fish");
+void imagine_fish(char thing []){
+	int len = strlen(thing);
+	char fi[] = "fish";
+	for (int i = 0; i < 4; i++){
+		thing[len + i] = fi[i];
+	}
+	thing[len + 4] = '\0';
 }
