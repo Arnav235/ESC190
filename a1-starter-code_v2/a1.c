@@ -150,7 +150,7 @@ void enqueue_order(Order* order, Restaurant* restaurant){
 }
 
 Order* dequeue_order(Restaurant* restaurant){
-	Order* dequed_order = restaurant->pending_orders->head;
+	QueueNode* dequed_order = restaurant->pending_orders->head;
 	if (restaurant->pending_orders->head == restaurant->pending_orders->tail){
 		restaurant->pending_orders->head = NULL;
 		restaurant->pending_orders->tail = NULL;
@@ -159,7 +159,48 @@ Order* dequeue_order(Restaurant* restaurant){
 	}
 	restaurant->num_pending_orders -= 1;
 	restaurant->num_completed_orders += 1;
-	return dequed_order;
+	return dequed_order->order;
+}
+
+double get_item_cost(char* item_code, Menu* menu){
+	double temp;
+	for(int i =0; i < menu->num_items; i++){
+		if(menu->item_codes[i] == item_code){
+			temp = menu->item_cost_per_unit[i];
+			return temp;
+		}
+	}
+	return 0;
+}
+
+double get_order_subtotal(Order* order, Menu* menu){
+	double order_subtotal = 0;
+	for (int i = 0; i < order->num_items; i++){
+		for (int j = 0; j < menu->num_items; j++){
+			if(order->item_codes[i] == menu->item_codes[j]){
+				order_subtotal = order_subtotal + (menu->item_cost_per_unit[j] * order->item_quantities[i]);
+				break;
+			}
+
+		}
+
+	}
+	return order_subtotal;
+}
+
+double get_order_total (Order* order, Menu* menu){
+	double order_subtotal = 0;
+	order_subtotal = get_order_subtotal(order, menu);
+	double order_total = order_subtotal + (order_subtotal*(TAX_RATE/100));
+	return order_total;
+}
+
+int get_num_completed_orders(Restaurant* restaurant){
+	return restaurant->num_completed_orders;
+}
+
+int get_num_pending_orders(Restaurant* restaurant){
+	return restaurant->num_pending_orders;
 }
 
 void print_menu(Menu* menu){
