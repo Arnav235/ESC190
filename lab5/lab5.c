@@ -114,6 +114,7 @@ char **plan_route(Graph *gr, char *start, char *dest){
                     if (strcmp(queue->arr[queue_idx]->station, temp->station) == 0){break;}
                     queue_idx++;
                 }
+                // if we didn't find the node in the queue
                 if (queue_idx == queue->size){
                     insert(queue, temp);
                 } else {
@@ -241,9 +242,6 @@ void disrupt(Graph *gr, char *station){
                 temp_enode = gr->adj_list[i]->edges;
             }
             // removing the vertex itself
-            if (i != 0){
-
-            }
             Vnode* removed_vertex = gr->adj_list[i];
             for (int j = i+1; j < gr->count; j++){
                 gr->adj_list[j-1] = gr->adj_list[j];
